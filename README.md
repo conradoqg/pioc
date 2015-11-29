@@ -347,7 +347,7 @@ an error will be thrown.
 
 **throws**: Error, if the specified *service* is not defined in the *module* or a parent of the *module* associated with the *Provider*.
 
-#### getAll(servicePrefix: String): Array<Any>
+#### getAll(servicePrefix: String): Array<Any>|Any
 Returns all services whose name starts with the given prefix.
 
 *Example*
@@ -407,6 +407,13 @@ a new instance (i.e. dependencies have been reconfigured for a child module).
 
 Returns the module to allow method chaining.
 
+#### bindAll(prefix: string, serviceContainer: Object): Module
+For each _service_ as _name_ in _serviceContainer_, it binds the specified _service_ to the given _name_ with the _prefix_. The service will be resolved
+when needed (i.e. lazy) and behaves like a singleton unless Inheritance requires
+a new instance (i.e. dependencies have been reconfigured for a child module).
+
+Returns the module to allow method chaining.
+
 #### bindFactory(name: String, service: Any): Module
 Binds the specified _service_ to the given _name_. The service will be resolved
 when needed (i.e. lazy) and will be instantiated whenever the specified service is
@@ -429,7 +436,7 @@ value.
 
 If *name* is specified, the service will be bound by that name, otherwise, the
 name of the service will be retrieved by using the last segment of the *filename*,
-without any file extensions.
+without any file extensions or $serviceName property.
 
 Returns the module to allow method chaining.
 
@@ -439,7 +446,19 @@ this module.
 
 If *name* is specified, the service will be bound by that name, otherwise, the
 name of the service will be retrieved by using the last segment of the *filename*,
-without any file extensions.
+without any file extensions or $serviceName property.
+
+Returns the module to allow method chaining.
+
+#### loadPath([prefix: String, ]path: String): Module
+Loads a service using require. The module.exports of the file will be bound to
+this module.
+
+If *prefix* is specified, the service will be bound by that prefix, the
+name of the service will be retrieved by using the last segment of the *filename*,
+without any file extensions or $serviceName property.
+
+Tha *path* will be retrivied using _[blob](https://github.com/isaacs/node-glob)_ module.
 
 Returns the module to allow method chaining.
 
@@ -448,7 +467,7 @@ Loads a service using require. The module.exports of the file will be bound to
 this module as a factory.
 
 If *name* is specified, the service will be bound by that name, otherwise, the
-name of the service will be retrieved by using the last segment of the *filename*,
+name of the service will be retrieved by using the last segment of the *filename* or $serviceName property,
 without any file extensions.
 
 Returns the module to allow method chaining.
